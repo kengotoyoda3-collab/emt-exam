@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>救命士国家試験 学習ツール</title>
+<style>
+:root{--main:#0f766e;--main2:#0d9488;--bg:#f3f6f8;--card:#fff;--text:#111827;--muted:#667085;--line:#dbe2ea;--ok:#16a34a;--ng:#dc2626;--warn:#d97706}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+.app-header{background:linear-gradient(135deg,var(--main),var(--main2));color:#fff;padding:52px 22px 42px}.header-inner{max-width:820px;margin:auto}
+h1{margin:0;font-size:34px;font-weight:1000}.header-sub{margin-top:12px;font-size:19px;font-weight:800;opacity:.95}
+main{max-width:820px;margin:-26px auto 40px;padding:0 16px}.panel{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:24px;box-shadow:0 18px 44px rgba(15,23,42,.08)}
+.menu-card{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px;border:1px solid var(--line);border-radius:20px;margin-bottom:16px;background:#fff;cursor:pointer}
+.menu-card:hover{border-color:var(--main2);background:#f0fdfa}.menu-title{color:var(--main);font-size:28px;font-weight:1000;margin-bottom:8px}.menu-desc{color:var(--muted);font-size:18px;font-weight:800}.arrow{font-size:34px;font-weight:1000}
+.label{color:var(--muted);font-weight:900;margin:22px 0 8px}select{width:100%;border:1px solid var(--line);border-radius:18px;padding:16px 18px;font-size:18px;background:#fff;font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}.stat{border:1px solid var(--line);border-radius:18px;background:#f8fafc;padding:14px 8px;text-align:center}.stat-label{color:var(--muted);font-weight:900;font-size:14px}.stat-num{color:var(--main);font-size:30px;font-weight:1000;margin-top:6px}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}button{border:1px solid var(--line);background:#fff;border-radius:16px;padding:14px 18px;font-weight:1000;font-size:16px;cursor:pointer}.danger{background:#fef2f2;color:#b91c1c;border-color:#fecaca}.gray{background:#eef2f7;color:#344054}
+.footer-note{text-align:center;color:var(--muted);margin:30px 0;font-weight:700;line-height:1.6}.hidden{display:none!important}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.back{border:none;background:transparent;color:var(--main);font-size:34px;padding:0}.exit{background:#eef2f7;border:none;color:#344054;border-radius:18px;padding:14px 20px}
+.progress{height:12px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin:8px 0 14px}.progress div{height:100%;width:0%;background:linear-gradient(90deg,#22c55e,var(--main2))}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}.pill{border:1px solid var(--line);border-radius:999px;padding:9px 12px;color:#475467;background:#fff;font-weight:800}.qno{color:var(--main);font-size:22px;font-weight:1000}
+.question{font-size:25px;line-height:1.55;font-weight:1000;margin:18px 0}.unknown-box{border:1px solid #fecaca;background:#fff7f7;color:#b91c1c;border-radius:16px;padding:14px;font-weight:900;display:flex;align-items:center;gap:10px;margin-bottom:14px}.unknown-box input{width:24px;height:24px}
+.help{background:#fffbeb;border:1px solid #fde68a;color:#78350f;border-radius:16px;padding:14px;margin-top:16px;line-height:1.6;font-weight:800}
+.choices{display:flex;flex-direction:column;gap:14px}.choice{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px 14px;min-height:84px;cursor:pointer}.choice-symbol{flex:0 0 auto;width:42px;height:42px;border:2px solid #9ca3af;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:1000;color:#111827;background:#fff}.choice-text{font-size:22px;line-height:1.45;font-weight:900}
+.choice.state-tri{border-color:#f59e0b;background:#fff7ed}.choice.state-tri .choice-symbol{border-color:#f59e0b;color:#d97706}.choice.state-o{border-color:#22c55e;background:#f0fdf4}.choice.state-o .choice-symbol{border-color:#22c55e;color:#16a34a}.choice.correct{border-color:#22c55e!important;background:#dcfce7!important}.choice.wrong{border-color:#ef4444!important;background:#fee2e2!important}
+.primary{width:100%;background:linear-gradient(135deg,var(--main),var(--main2));color:#fff;border-color:var(--main);font-size:22px;padding:18px;margin-top:18px}.result{margin-top:18px;border-radius:18px;padding:18px;font-size:22px;font-weight:1000}.result.ok{background:#dcfce7;color:#166534}.result.ng{background:#fee2e2;color:#991b1b}
+.reference{margin-top:14px;border:2px dashed #cbd5e1;border-radius:18px;padding:16px;color:#344054;background:#f8fafc;font-size:18px;line-height:1.6;font-weight:800}.bookmark{width:100%;background:#f1f5f9;font-size:20px;margin-top:14px}
+@media(max-width:640px){main{padding:0 15px}.panel{padding:18px;border-radius:24px}.stats{gap:8px}}
+</style>
+</head>
+<body>
+<header class="app-header"><div class="header-inner"><h1>救命士国家試験 学習ツール</h1><div class="header-sub">練習・50問実力確認・間違い復習</div></div></header>
+<main>
+<section id="menuScreen" class="panel">
+  <div class="menu-card" data-mode="practice"><div><div class="menu-title">📖 練習モード</div><div class="menu-desc">ランダムに何問でもループ</div></div><div class="arrow">›</div></div>
+  <div class="menu-card" data-mode="test50"><div><div class="menu-title">📋 50問モード</div><div class="menu-desc">実力確認用。50問で終了</div></div><div class="arrow">›</div></div>
+  <div class="menu-card" data-mode="review"><div><div class="menu-title">🔄 間違い復習</div><div class="menu-desc">過去に間違えた問題から出題</div></div><div class="arrow">›</div></div>
+  <div class="menu-card" data-mode="bookmark"><div><div class="menu-title">⭐ ブックマーク復習</div><div class="menu-desc">後で復習に登録した問題</div></div><div class="arrow">›</div></div>
+  <div class="label">分野フィルター</div><select id="categoryFilter"><option value="">全分野</option></select>
+  <div class="stats"><div class="stat"><div class="stat-label">総問題</div><div class="stat-num" id="totalCount">0</div></div><div class="stat"><div class="stat-label">学習済み</div><div class="stat-num" id="seenCount">0</div></div><div class="stat"><div class="stat-label">正答率</div><div class="stat-num" id="rateCount">-%</div></div></div>
+  <div class="btn-row"><button class="gray" onclick="location.reload()">再読込</button><button class="danger" id="resetBtn">学習データをリセット</button></div>
+</section>
+<section id="quizScreen" class="panel hidden">
+  <div class="topbar"><button class="back" id="backBtn">‹</button><div class="qno" id="quizTitle">問題</div><button class="exit" id="finishBtn">終了</button></div>
+  <div class="progress"><div id="progressBar"></div></div><div class="meta" id="metaArea"></div><div class="question" id="questionText"></div>
+  <label class="unknown-box"><input type="checkbox" id="unknownCheck"><span>全くわからない場合はここにチェック（×）</span></label>
+  <div class="choices" id="choicesArea"></div><button class="primary" id="answerBtn">回答する</button>
+  <div class="help" id="helpBox">解答方法<br>・全くわからない → 問題文下の「×」にチェック<br>・少し自信がある → 選択肢を1回タップで「△」<br>・正解だと思う → 選択肢を2回タップで「○」</div>
+  <div id="afterArea"></div>
+</section>
+<div class="footer-note">問題データ：questions.json ／ ブラウザ内に履歴保存</div>
+</main>
+<script>
+const STORAGE_KEY="emt_simple_1700_v2";const SYMBOLS=["①","②","③","④","⑤"];let allQuestions=[],pool=[],currentIndex=0,mode="practice",answered=false,currentDisplayChoices=[],state=loadState();
+const $=id=>document.getElementById(id);
+function loadState(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{records:{}}}catch(e){return{records:{}}}}
+function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
+function rec(id){id=String(id);if(!state.records[id])state.records[id]={seen:0,correct:0,wrong:0,bookmark:false};return state.records[id]}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function normalize(q,i){const id=Number(q.number??q.id??i+1);const choices=(q.choices||[]).map((c,idx)=>typeof c==="string"?{id:idx+1,text:c}:{id:Number(c.id??idx+1),text:c.text??String(c)});let ref="";if(q.reference&&typeof q.reference==="object")ref=q.reference.raw||[q.reference.volume,q.reference.chapter,q.reference.page?"p."+q.reference.page:""].filter(Boolean).join(" ");else ref=q.source||q.reference||"";const page=q.source_page||q.page||(q.reference&&q.reference.page?"p."+q.reference.page:"");return{id,number:id,category:q.category||"",chapter:q.chapter||q.reference_topic||"",difficulty:q.difficulty||q.level||"",type:q.type||q.format||"",question:q.question||"",choices,answer:(q.answer||[]).map(Number),reference:ref,page:String(page||"")}}
+function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+async function init(){try{const res=await fetch("questions.json",{cache:"no-store"});allQuestions=(await res.json()).map(normalize).sort((a,b)=>a.number-b.number)}catch(e){alert("questions.jsonを読み込めません。index.htmlとquestions.jsonを同じ場所にアップロードしてください。");return}
+$("totalCount").textContent=allQuestions.length;const cats=[...new Set(allQuestions.map(q=>q.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"ja"));$("categoryFilter").innerHTML='<option value="">全分野</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");updateStats()}
+function updateStats(){let seen=0,correct=0,wrong=0;allQuestions.forEach(q=>{const r=rec(q.id);if(r.seen)seen++;correct+=r.correct;wrong+=r.wrong});const total=correct+wrong;$("seenCount").textContent=seen;$("rateCount").textContent=total?Math.round(correct/total*100)+"%":"-%"}
+function makePool(m){const cat=$("categoryFilter").value;let arr=allQuestions.filter(q=>!cat||q.category===cat);if(m==="review")arr=arr.filter(q=>rec(q.id).wrong>0);if(m==="bookmark")arr=arr.filter(q=>rec(q.id).bookmark);arr=shuffle(arr);if(m==="test50")arr=arr.slice(0,50);return arr.map(q=>q.id)}
+function start(m){mode=m;pool=makePool(mode);currentIndex=0;if(!pool.length){alert("出題できる問題がありません。");return}$("menuScreen").classList.add("hidden");$("quizScreen").classList.remove("hidden");renderQuestion()}
+function currentQuestion(){return allQuestions.find(q=>q.id===pool[currentIndex])}
+function renderQuestion(){answered=false;const q=currentQuestion(),total=pool.length;$("quizTitle").textContent=mode==="test50"?`問題 ${currentIndex+1} / 50問テスト`:`問題 ${q.number}`;$("progressBar").style.width=((currentIndex+1)/total*100)+"%";$("metaArea").innerHTML=[q.difficulty,q.category,q.chapter,q.answer.length+"個選択",q.type||"形式未設定"].filter(Boolean).map(v=>`<span class="pill">${esc(v)}</span>`).join("");$("questionText").textContent=q.question;$("unknownCheck").checked=false;currentDisplayChoices=shuffle(q.choices).map(c=>({...c,mark:""}));renderChoices();$("answerBtn").classList.remove("hidden");$("helpBox").classList.remove("hidden");$("afterArea").innerHTML=""}
+function renderChoices(){$("choicesArea").innerHTML=currentDisplayChoices.map((c,i)=>{const cls=c.mark==="○"?"state-o":c.mark==="△"?"state-tri":"";return`<div class="choice ${cls}" data-i="${i}"><div class="choice-symbol">${esc(c.mark)}</div><div class="choice-text">${SYMBOLS[i]} ${esc(c.text)}</div></div>`}).join("");document.querySelectorAll(".choice").forEach(el=>el.onclick=()=>tapChoice(Number(el.dataset.i)))}
+function tapChoice(i){if(answered)return;const c=currentDisplayChoices[i];if(c.mark==="")c.mark="△";else if(c.mark==="△")c.mark="○";else if(c.mark==="○")c.mark="";renderChoices()}
+function answer(){if(answered)return;const q=currentQuestion(),unknown=$("unknownCheck").checked;if(unknown)currentDisplayChoices.forEach(c=>{if(c.mark==="")c.mark="×"});const selected=currentDisplayChoices.filter(c=>c.mark==="○").map(c=>c.id).sort((a,b)=>a-b),correct=q.answer.slice().sort((a,b)=>a-b);const ok=!unknown&&selected.length===correct.length&&selected.every((v,i)=>v===correct[i]);answered=true;const r=rec(q.id);r.seen++;ok?r.correct++:r.wrong++;saveState();updateStats();$("choicesArea").innerHTML=currentDisplayChoices.map((c,i)=>{const isCorrect=correct.includes(c.id),isSelected=selected.includes(c.id);const cls=isCorrect?"correct":(isSelected||(unknown&&c.mark==="×")?"wrong":"");return`<div class="choice ${cls}"><div class="choice-symbol">${esc(c.mark)}</div><div class="choice-text">${SYMBOLS[i]} ${esc(c.text)}</div></div>`}).join("");const correctLabels=currentDisplayChoices.map((c,i)=>correct.includes(c.id)?SYMBOLS[i]:null).filter(Boolean).join("・");$("answerBtn").classList.add("hidden");$("helpBox").classList.add("hidden");$("afterArea").innerHTML=`<div class="result ${ok?"ok":"ng"}">${ok?"正解です！":"不正解"}</div><div class="reference">正答：${correctLabels}<br>出典：${esc(q.reference||"未設定")} ${q.page?esc(q.page):""}</div><button class="primary" id="nextBtn">${currentIndex>=pool.length-1?"終了する":"次の問題へ"}</button><button class="bookmark" id="bookmarkBtn">${rec(q.id).bookmark?"⭐ ブックマーク解除":"⭐ 後で復習"}</button>`;$("nextBtn").onclick=next;$("bookmarkBtn").onclick=()=>{const rr=rec(q.id);rr.bookmark=!rr.bookmark;saveState();$("bookmarkBtn").textContent=rr.bookmark?"⭐ ブックマーク解除":"⭐ 後で復習"}}
+function next(){if(currentIndex>=pool.length-1){backToMenu();return}currentIndex++;renderQuestion();scrollTo({top:0,behavior:"smooth"})}
+function backToMenu(){$("quizScreen").classList.add("hidden");$("menuScreen").classList.remove("hidden");updateStats();scrollTo({top:0,behavior:"smooth"})}
+document.querySelectorAll(".menu-card").forEach(card=>card.onclick=()=>start(card.dataset.mode));$("answerBtn").onclick=answer;$("finishBtn").onclick=backToMenu;$("backBtn").onclick=backToMenu;$("resetBtn").onclick=()=>{if(confirm("学習データをすべて削除しますか？")){localStorage.removeItem(STORAGE_KEY);state={records:{}};updateStats()}};init();
+</script>
+</body>
+</html>
