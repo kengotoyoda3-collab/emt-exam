@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<title>救命士国家試験 学習ツール</title>
+<style>
+:root{
+  --bg:#f5f7f8;
+  --card:#ffffff;
+  --text:#172026;
+  --muted:#667085;
+  --main:#0f766e;
+  --main2:#0d9488;
+  --border:#d8dee4;
+  --danger:#dc2626;
+  --danger-bg:#fee2e2;
+  --ok:#16a34a;
+  --ok-bg:#dcfce7;
+  --warn:#d97706;
+  --warn-bg:#fff7ed;
+  --shadow:0 10px 28px rgba(16,24,40,.10);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.65;
+  -webkit-tap-highlight-color:transparent;
+}
+header{
+  background:linear-gradient(135deg,var(--main),var(--main2));
+  color:white;
+  padding:22px 16px 18px;
+  position:sticky;
+  top:0;
+  z-index:10;
+  box-shadow:0 4px 16px rgba(0,0,0,.12);
+}
+header h1{
+  font-size:22px;
+  margin:0 0 4px;
+  font-weight:900;
+  letter-spacing:.02em;
+}
+header p{
+  margin:0;
+  font-size:13px;
+  opacity:.95;
+  font-weight:700;
+}
+main{
+  max-width:760px;
+  margin:0 auto;
+  padding:14px 14px 36px;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:16px;
+  margin:12px 0;
+}
+.row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+button,select{font:inherit}
+button{
+  border:0;
+  border-radius:14px;
+  padding:13px 14px;
+  font-weight:800;
+  cursor:pointer;
+  background:#e6f4f1;
+  color:var(--main);
+  transition:.12s transform,.12s opacity;
+}
+button:active{transform:scale(.98)}
+button.primary{
+  background:var(--main);
+  color:white;
+  width:100%;
+}
+button.secondary{
+  background:#eef2f6;
+  color:#344054;
+}
+button.danger{
+  background:#fee2e2;
+  color:#991b1b;
+}
+button.small{
+  padding:8px 10px;
+  border-radius:10px;
+  font-size:13px;
+}
+.modeBtn{
+  flex:1 1 210px;
+  min-height:78px;
+  text-align:left;
+  background:white;
+  border:1px solid var(--border);
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.modeBtn b{
+  display:block;
+  font-size:18px;
+  color:var(--main);
+}
+.modeBtn .arrow{
+  font-size:26px;
+  color:#111827;
+  font-weight:900;
+}
+.muted{
+  color:var(--muted);
+  font-size:13px;
+}
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:4px 9px;
+  font-size:12px;
+  background:#fafafa;
+  color:#475467;
+  margin:2px;
+  font-weight:700;
+}
+.qNo{
+  font-weight:900;
+  color:var(--main);
+  font-size:14px;
+  margin-bottom:6px;
+}
+.question{
+  font-size:20px;
+  font-weight:900;
+  line-height:1.55;
+  margin:8px 0 14px;
+  white-space:pre-wrap;
+}
+.choice{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:#fff;
+  margin:9px 0;
+  cursor:pointer;
+  font-weight:750;
+  min-height:64px;
+}
+.choiceMark{
+  width:38px;
+  height:38px;
+  border:2px solid #cbd5e1;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:900;
+  flex:0 0 auto;
+  background:#fff;
+  color:#475467;
+}
+.choiceText{flex:1}
+.choice.triangle{
+  border-color:#f59e0b;
+  background:var(--warn-bg);
+}
+.choice.triangle .choiceMark{
+  border-color:#f59e0b;
+  color:var(--warn);
+}
+.choice.circle{
+  border-color:var(--ok);
+  background:#f0fdf4;
+}
+.choice.circle .choiceMark{
+  border-color:var(--ok);
+  color:var(--ok);
+}
+.choice.correct{
+  border-color:var(--ok)!important;
+  background:var(--ok-bg)!important;
+}
+.choice.wrong{
+  border-color:var(--danger)!important;
+  background:var(--danger-bg)!important;
+}
+.result{
+  padding:14px;
+  border-radius:14px;
+  margin-top:12px;
+  font-weight:900;
+  display:none;
+}
+.result.ok{
+  display:block;
+  background:var(--ok-bg);
+  color:#166534;
+}
+.result.ng{
+  display:block;
+  background:var(--danger-bg);
+  color:#991b1b;
+}
+.source{
+  margin-top:10px;
+  padding:12px;
+  border-radius:12px;
+  background:#f8fafc;
+  border:1px dashed #cbd5e1;
+  color:#334155;
+  font-size:14px;
+  display:none;
+  font-weight:700;
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+.stat{
+  background:#f8fafc;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:10px;
+  text-align:center;
+}
+.stat b{
+  display:block;
+  font-size:20px;
+  color:var(--main);
+}
+select{
+  width:100%;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:white;
+  color:var(--text);
+}
+.hidden{display:none!important}
+.progressbar{
+  height:10px;
+  background:#e5e7eb;
+  border-radius:999px;
+  overflow:hidden;
+  margin:8px 0 4px;
+}
+.progressbar span{
+  display:block;
+  height:100%;
+  background:var(--main);
+  width:0%;
+}
+footer{
+  font-size:12px;
+  color:var(--muted);
+  text-align:center;
+  padding:20px 0;
+}
+.unknown{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:12px 0;
+  padding:12px;
+  border:1px solid #fecaca;
+  background:#fff7f7;
+  border-radius:14px;
+  color:#991b1b;
+  font-weight:900;
+}
+.unknown input{
+  width:22px;
+  height:22px;
+}
+.howto{
+  margin-top:10px;
+  padding:11px 12px;
+  border-radius:12px;
+  background:#fffbeb;
+  border:1px solid #fde68a;
+  color:#78350f;
+  font-size:13px;
+  font-weight:750;
+}
+.bookmarkActive{
+  background:#fef3c7!important;
+  color:#92400e!important;
+}
+@media (max-width:520px){
+  header h1{font-size:20px}
+  .question{font-size:18px}
+  .stats{grid-template-columns:1fr 1fr 1fr}
+  .card{padding:14px}
+  .choice{min-height:62px}
+  .choiceText{font-size:16px}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>救命士国家試験 学習ツール</h1>
+  <p>練習・50問実力確認・間違い復習</p>
+</header>
+
+<main>
+  <section id="home" class="card">
+    <div class="row">
+      <button class="modeBtn" data-mode="practice">
+        <span><b>練習モード</b><span class="muted">ランダムに何問でもループ</span></span><span class="arrow">›</span>
+      </button>
+      <button class="modeBtn" data-mode="exam">
+        <span><b>50問モード</b><span class="muted">実力確認用。50問で終了</span></span><span class="arrow">›</span>
+      </button>
+      <button class="modeBtn" data-mode="mistakes">
+        <span><b>間違い復習</b><span class="muted">過去に間違えた問題から出題</span></span><span class="arrow">›</span>
+      </button>
+      <button class="modeBtn" data-mode="bookmarks">
+        <span><b>ブックマーク復習</b><span class="muted">⭐ 後で復習に登録した問題</span></span><span class="arrow">›</span>
+      </button>
+    </div>
+
+    <div style="height:10px"></div>
+    <label class="muted">分野フィルター</label>
+    <select id="categorySelect"><option value="all">全分野</option></select>
+
+    <div class="stats" style="margin-top:12px">
+      <div class="stat"><span class="muted">総問題</span><b id="totalCount">0</b></div>
+      <div class="stat"><span class="muted">正解</span><b id="correctCount">0</b></div>
+      <div class="stat"><span class="muted">間違い</span><b id="wrongCount">0</b></div>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <button class="secondary small" id="resetBtn">履歴リセット</button>
+      <button class="secondary small" id="reloadBtn">再読込</button>
+    </div>
+  </section>
+
+  <section id="quiz" class="card hidden">
+    <div class="row" style="justify-content:space-between">
+      <div class="qNo" id="qMeta"></div>
+      <button class="secondary small" id="endBtn">終了</button>
+    </div>
+
+    <div class="progressbar"><span id="progress"></span></div>
+    <div class="muted" id="modeInfo"></div>
+    <div id="badges" style="margin-top:8px"></div>
+    <div class="question" id="questionText"></div>
+
+    <label class="unknown">
+      <input type="checkbox" id="unknownCheck">
+      <span>全くわからない（×）</span>
+    </label>
+
+    <form id="choicesBox"></form>
+
+    <button id="answerBtn" class="primary">回答する</button>
+
+    <div class="howto" id="howto">
+      1回タップ＝△（あやしい）／ 2回タップ＝○（正解と思う）／ 全くわからない場合は上の×にチェック
+    </div>
+
+    <div id="resultBox" class="result"></div>
+    <div id="sourceBox" class="source"></div>
+
+    <div class="row" style="margin-top:12px">
+      <button id="nextBtn" class="primary hidden">次の問題</button>
+      <button id="bookmarkBtn" class="secondary hidden">⭐ 後で復習</button>
+    </div>
+  </section>
+
+  <section id="summary" class="card hidden">
+    <h2 style="margin-top:0">50問モード結果</h2>
+    <div class="stats">
+      <div class="stat"><span class="muted">出題数</span><b id="sumTotal">50</b></div>
+      <div class="stat"><span class="muted">正解</span><b id="sumCorrect">0</b></div>
+      <div class="stat"><span class="muted">正答率</span><b id="sumRate">0%</b></div>
+    </div>
+    <button class="primary" style="margin-top:14px" id="homeBtn">ホームへ戻る</button>
+  </section>
+
+  <footer>問題データ：questions.json / ブラウザ内に履歴保存</footer>
+</main>
+
+<script>
+'use strict';
+
+const APP = {
+  questions: [],
+  mode: 'practice',
+  queue: [],
+  current: null,
+  displayedChoices: [],
+  correctDisplayNos: [],
+  lastQuestionId: null,
+  answered: false,
+  examCorrect: 0,
+  examTotal: 0,
+  examIndex: 0
+};
+
+const LS_KEY = 'emt_exam_learning_v4';
+const MARKS = ['①','②','③','④','⑤'];
+
+function $(id){ return document.getElementById(id); }
+
+function defaultState(){
+  return { correct:{}, wrong:{}, bookmarks:{}, history:{} };
+}
+
+function loadState(){
+  try{
+    return {...defaultState(), ...(JSON.parse(localStorage.getItem(LS_KEY)) || {})};
+  }catch(e){
+    return defaultState();
+  }
+}
+
+function saveState(state){
+  localStorage.setItem(LS_KEY, JSON.stringify(state));
+}
+
+function shuffle(list){
+  const a = [...list];
+  for(let i=a.length-1; i>0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function normalizeAnswer(arr){
+  return [...arr].map(Number).sort((a,b)=>a-b).join(',');
+}
+
+function getQuestionId(q){
+  return Number(q.number || q.id);
+}
+
+function getCategory(q){
+  return q.category || q.chapter || '未分類';
+}
+
+function getLevel(q){
+  return q.level || q.difficulty || '未分類';
+}
+
+function getQuestionType(q){
+  return q.type || q.format || '';
+}
+
+function getAnswerArray(q){
+  return (q.answer || []).map(Number);
+}
+
+function getChoices(q){
+  return (q.choices || []).map((choice, index) => {
+    if(typeof choice === 'string'){
+      return { text: choice, originalNo: index + 1 };
+    }
+    return {
+      text: choice.text || String(choice),
+      originalNo: Number(choice.id || index + 1)
+    };
+  });
+}
+
+function getSourceText(q){
+  if(q.reference && typeof q.reference === 'object'){
+    const raw = q.reference.raw || '';
+    const page = q.reference.page ? `p.${q.reference.page}` : '';
+    return (raw || page || '未設定').trim();
+  }
+  if(q.source && typeof q.source === 'string'){
+    return `${q.source} ${q.source_page || q.page || ''}`.trim();
+  }
+  return q.reference || q.source || '未設定';
+}
+
+function filterQuestions(){
+  const category = $('categorySelect').value;
+  return APP.questions.filter(q => category === 'all' || getCategory(q) === category);
+}
+
+async function init(){
+  try{
+    const res = await fetch('questions.json', { cache:'no-store' });
+    APP.questions = await res.json();
+  }catch(e){
+    alert('questions.jsonを読み込めませんでした。index.htmlとquestions.jsonを同じ場所にアップロードしてください。');
+    return;
+  }
+
+  const categories = [...new Set(APP.questions.map(q => getCategory(q)).filter(Boolean))]
+    .sort((a,b) => a.localeCompare(b, 'ja'));
+
+  const select = $('categorySelect');
+  categories.forEach(category => {
+    const option = document.createElement('option');
+    option.value = category;
+    option.textContent = category;
+    select.appendChild(option);
+  });
+
+  bindEvents();
+  renderHomeStats();
+}
+
+function bindEvents(){
+  document.querySelectorAll('.modeBtn').forEach(btn => {
+    btn.addEventListener('click', () => startMode(btn.dataset.mode));
+  });
+
+  $('categorySelect').addEventListener('change', renderHomeStats);
+  $('resetBtn').addEventListener('click', resetLearning);
+  $('reloadBtn').addEventListener('click', () => location.reload());
+  $('endBtn').addEventListener('click', goHome);
+  $('homeBtn').addEventListener('click', goHome);
+  $('answerBtn').addEventListener('click', checkAnswer);
+  $('nextBtn').addEventListener('click', nextQuestion);
+  $('bookmarkBtn').addEventListener('click', toggleBookmark);
+  $('unknownCheck').addEventListener('change', onUnknownChanged);
+}
+
+function renderHomeStats(){
+  const state = loadState();
+  const list = filterQuestions();
+  const ids = new Set(list.map(q => String(getQuestionId(q))));
+
+  $('totalCount').textContent = list.length;
+  $('correctCount').textContent = Object.keys(state.correct || {}).filter(id => ids.has(id)).length;
+  $('wrongCount').textContent = Object.keys(state.wrong || {}).filter(id => ids.has(id)).length;
+}
+
+function showOnly(screenId){
+  ['home','quiz','summary'].forEach(id => $(id).classList.toggle('hidden', id !== screenId));
+}
+
+function goHome(){
+  showOnly('home');
+  renderHomeStats();
+}
+
+function startMode(mode){
+  APP.mode = mode;
+  APP.examCorrect = 0;
+  APP.examTotal = 0;
+  APP.examIndex = 0;
+
+  let list = shuffle(filterQuestions());
+  const state = loadState();
+
+  if(mode === 'mistakes'){
+    const ids = new Set(Object.keys(state.wrong || {}).map(Number));
+    list = shuffle(filterQuestions().filter(q => ids.has(getQuestionId(q))));
+  }
+
+  if(mode === 'bookmarks'){
+    const ids = new Set(Object.keys(state.bookmarks || {}).map(Number));
+    list = shuffle(filterQuestions().filter(q => ids.has(getQuestionId(q))));
+  }
+
+  if(mode === 'exam'){
+    if(list.length < 50 && !confirm('この分野は50問未満です。ある分だけ出題します。')) return;
+    list = list.slice(0, 50);
+    APP.examTotal = list.length;
+  }
+
+  if(!list.length){
+    alert(mode === 'mistakes' ? '間違えた問題がまだありません。' :
+          mode === 'bookmarks' ? 'ブックマークした問題がまだありません。' :
+          'この分野の問題がありません。');
+    return;
+  }
+
+  APP.queue = list;
+  showOnly('quiz');
+  nextQuestion();
+}
+
+function nextQuestion(){
+  if(APP.mode === 'exam' && APP.examIndex >= APP.examTotal){
+    showSummary();
+    return;
+  }
+
+  if(APP.queue.length === 0){
+    APP.queue = shuffle(filterQuestions());
+    if(!APP.queue.length){
+      goHome();
+      return;
+    }
+  }
+
+  APP.current = APP.queue.shift();
+
+  if(APP.queue.length > 0 && getQuestionId(APP.current) === APP.lastQuestionId){
+    APP.queue.push(APP.current);
+    APP.current = APP.queue.shift();
+  }
+
+  APP.lastQuestionId = getQuestionId(APP.current);
+  APP.answered = false;
+
+  if(APP.mode === 'exam') APP.examIndex++;
+
+  renderQuestion();
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+function renderQuestion(){
+  resetQuestionUI();
+
+  const current = APP.current;
+  const state = loadState();
+  const qid = getQuestionId(current);
+  const history = state.history?.[qid] || { try:0, ok:0 };
+  const rateText = history.try ? ` / 過去${history.try}回中${history.ok}回正解` : ' / 初回';
+  const answerCount = getAnswerArray(current).length;
+
+  $('modeInfo').textContent = getModeText();
+  $('progress').style.width = APP.mode === 'exam' ? `${(APP.examIndex / APP.examTotal) * 100}%` : '0%';
+  $('qMeta').textContent = `問題 ${qid}`;
+  $('badges').innerHTML = `
+    <span class="pill">${escapeHtml(getLevel(current))}</span>
+    <span class="pill">${escapeHtml(getCategory(current))}</span>
+    <span class="pill">${answerCount}個選択</span>
+    <span class="pill">${escapeHtml(getQuestionType(current) || '形式未設定')}${escapeHtml(rateText)}</span>
+  `;
+  $('questionText').textContent = current.question || '';
+
+  APP.displayedChoices = shuffle(getChoices(current)).map((choice, index) => ({
+    ...choice,
+    displayNo: index + 1,
+    mark: ''
+  }));
+
+  const originalAnswers = getAnswerArray(current);
+  APP.correctDisplayNos = APP.displayedChoices
+    .filter(choice => originalAnswers.includes(choice.originalNo))
+    .map(choice => choice.displayNo);
+
+  renderChoices();
+}
+
+function resetQuestionUI(){
+  $('resultBox').className = 'result';
+  $('resultBox').textContent = '';
+  $('sourceBox').style.display = 'none';
+  $('sourceBox').innerHTML = '';
+  $('nextBtn').classList.add('hidden');
+  $('bookmarkBtn').classList.add('hidden');
+  $('answerBtn').classList.remove('hidden');
+  $('howto').classList.remove('hidden');
+  $('unknownCheck').checked = false;
+}
+
+function getModeText(){
+  if(APP.mode === 'practice') return '練習モード';
+  if(APP.mode === 'exam') return `50問モード：${APP.examIndex}/${APP.examTotal}`;
+  if(APP.mode === 'mistakes') return '間違い復習モード';
+  return 'ブックマーク復習モード';
+}
+
+function renderChoices(){
+  const box = $('choicesBox');
+  box.innerHTML = '';
+
+  APP.displayedChoices.forEach((choice, index) => {
+    const element = document.createElement('div');
+    element.className = getChoiceClass(choice.mark);
+    element.dataset.displayNo = choice.displayNo;
+    element.innerHTML = `
+      <span class="choiceMark">${escapeHtml(choice.mark)}</span>
+      <span class="choiceText">${MARKS[index]} ${escapeHtml(choice.text)}</span>
+    `;
+    element.addEventListener('click', () => cycleChoice(choice.displayNo));
+    box.appendChild(element);
+  });
+}
+
+function getChoiceClass(mark){
+  if(mark === '△') return 'choice triangle';
+  if(mark === '○') return 'choice circle';
+  return 'choice';
+}
+
+function cycleChoice(displayNo){
+  if(APP.answered) return;
+
+  $('unknownCheck').checked = false;
+
+  const choice = APP.displayedChoices.find(item => item.displayNo === displayNo);
+  if(!choice) return;
+
+  if(choice.mark === '') choice.mark = '△';
+  else if(choice.mark === '△') choice.mark = '○';
+  else choice.mark = '';
+
+  renderChoices();
+}
+
+function onUnknownChanged(){
+  if(APP.answered) return;
+
+  if($('unknownCheck').checked){
+    APP.displayedChoices.forEach(choice => choice.mark = '');
+    renderChoices();
+  }
+}
+
+function getUserInput(){
+  const unknown = $('unknownCheck').checked;
+  const circleNos = APP.displayedChoices.filter(choice => choice.mark === '○').map(choice => choice.displayNo);
+  const triangleNos = APP.displayedChoices.filter(choice => choice.mark === '△').map(choice => choice.displayNo);
+  const hasAnyInput = unknown || circleNos.length > 0 || triangleNos.length > 0;
+
+  return { unknown, circleNos, triangleNos, hasAnyInput };
+}
+
+function checkAnswer(){
+  if(APP.answered) return;
+
+  const input = getUserInput();
+
+  if(!input.hasAnyInput){
+    alert('選択肢をタップしてください。1回タップで△、2回タップで○です。');
+    return;
+  }
+
+  const ok = !input.unknown && normalizeAnswer(input.circleNos) === normalizeAnswer(APP.correctDisplayNos);
+
+  APP.answered = true;
+  saveAnswerResult(ok);
+  paintAnsweredChoices(input);
+  showResult(ok);
+  renderHomeStats();
+}
+
+function saveAnswerResult(ok){
+  const qid = getQuestionId(APP.current);
+  const state = loadState();
+
+  if(!state.history[qid]) state.history[qid] = { try:0, ok:0 };
+  state.history[qid].try++;
+
+  if(ok){
+    state.history[qid].ok++;
+    state.correct[qid] = Date.now();
+    delete state.wrong[qid];
+    if(APP.mode === 'exam') APP.examCorrect++;
+  }else{
+    state.wrong[qid] = Date.now();
+  }
+
+  saveState(state);
+}
+
+function paintAnsweredChoices(input){
+  document.querySelectorAll('.choice').forEach((element, index) => {
+    const displayNo = index + 1;
+    const markBox = element.querySelector('.choiceMark');
+    const isCorrect = APP.correctDisplayNos.includes(displayNo);
+    const wasCircle = input.circleNos.includes(displayNo);
+    const wasTriangle = input.triangleNos.includes(displayNo);
+
+    if(isCorrect){
+      element.classList.add('correct');
+      if(!markBox.textContent) markBox.textContent = '○';
+      return;
+    }
+
+    if(wasCircle || wasTriangle || input.unknown){
+      element.classList.add('wrong');
+      if(!markBox.textContent) markBox.textContent = input.unknown ? '×' : (wasTriangle ? '△' : '○');
+    }
+  });
+}
+
+function showResult(ok){
+  const qid = getQuestionId(APP.current);
+
+  $('resultBox').className = 'result ' + (ok ? 'ok' : 'ng');
+  $('resultBox').textContent = ok ? '正解！' : '不正解';
+
+  const answerLabels = APP.correctDisplayNos
+    .map(no => MARKS[no - 1])
+    .join('・');
+
+  $('sourceBox').innerHTML = `<b>正答：</b>${answerLabels}<br><b>出典：</b>${escapeHtml(getSourceText(APP.current))}`;
+  $('sourceBox').style.display = 'block';
+
+  $('answerBtn').classList.add('hidden');
+  $('howto').classList.add('hidden');
+  $('nextBtn').classList.remove('hidden');
+  $('bookmarkBtn').classList.remove('hidden');
+
+  const state = loadState();
+  $('bookmarkBtn').classList.toggle('bookmarkActive', !!state.bookmarks[qid]);
+  $('bookmarkBtn').textContent = state.bookmarks[qid] ? '⭐ ブックマーク解除' : '⭐ 後で復習';
+}
+
+function toggleBookmark(){
+  const qid = getQuestionId(APP.current);
+  const state = loadState();
+
+  if(state.bookmarks[qid]){
+    delete state.bookmarks[qid];
+    alert('ブックマークを解除しました');
+  }else{
+    state.bookmarks[qid] = Date.now();
+    alert('ブックマークしました');
+  }
+
+  saveState(state);
+  $('bookmarkBtn').classList.toggle('bookmarkActive', !!state.bookmarks[qid]);
+  $('bookmarkBtn').textContent = state.bookmarks[qid] ? '⭐ ブックマーク解除' : '⭐ 後で復習';
+}
+
+function showSummary(){
+  showOnly('summary');
+  $('sumTotal').textContent = APP.examTotal;
+  $('sumCorrect').textContent = APP.examCorrect;
+  $('sumRate').textContent = APP.examTotal ? Math.round((APP.examCorrect / APP.examTotal) * 100) + '%' : '0%';
+}
+
+function resetLearning(){
+  if(confirm('正解・間違い・ブックマーク・正答率履歴をすべて削除しますか？')){
+    localStorage.removeItem(LS_KEY);
+    renderHomeStats();
+  }
+}
+
+function escapeHtml(value){
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[char]));
+}
+
+init();
+</script>
+</body>
+</html>
